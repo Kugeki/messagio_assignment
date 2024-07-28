@@ -36,4 +36,9 @@ jobs:
         working-directory: ./
         run: |
           go mod tidy
-          go test -v -race -covermode=atomic ./...
+          go test -v -coverprofile=coverage.txt -race -covermode=atomic ./...
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_ORG_TOKEN }}
