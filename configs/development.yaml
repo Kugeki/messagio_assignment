@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+environment: development
+log_level: DEBUG
+shutdown_timeout: 10s
+
+http_server:
+  addr: 0.0.0.0:8080
+  timeouts:
+    read: 10s
+    read_header: 10s
+    write: 10s
+
+postgres:
+  migrate: true

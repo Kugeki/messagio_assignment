@@ -1,0 +1,30 @@
+services:
+  webapp:
+    build: .
+    container_name: webserver
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_CONNECTION_URL=postgres://messagiouser:messagiopassword@postgres:5432/messagiodb?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16.3-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: messagiouser
+      POSTGRES_PASSWORD: messagiopassword
+      POSTGRES_DB: messagiodb
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U messagiouser -d messagiodb"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  db_volume:

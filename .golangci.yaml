@@ -1,0 +1,37 @@
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gocritic
+    - gocyclo
+    - gosec
+    - revive
+    - testifylint
+
+
+linters-settings:
+  revive:
+    rules:
+      - name: blank-imports
+      - name: context-keys-type
+      - name: dot-imports
+      - name: empty-block
+      - name: error-naming
+      - name: error-return
+      - name: error-strings
+      - name: errorf
+      - name: indent-error-flow
+      - name: receiver-naming
+      - name: redefines-builtin-id
+      - name: superfluous-else
+      - name: time-naming
+      - name: unreachable-code
+      - name: var-declaration
+      - name: var-naming
+
+run:
+  timeout: 3m
