@@ -1,0 +1,5 @@
+services:
+  webapp:
+    build: .
+    environment:
+      APP_CONFIG_PATH: configs/development.yaml
