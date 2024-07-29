@@ -11,7 +11,7 @@ type PgxLogger struct {
 }
 
 func NewPgxLogger(log *slog.Logger) *PgxLogger {
-	return &PgxLogger{log: log}
+	return &PgxLogger{log: log.With(slog.String("lib", "pgx"))}
 }
 
 func (l *PgxLogger) Log(ctx context.Context, level tracelog.LogLevel, msg string, data map[string]interface{}) {
