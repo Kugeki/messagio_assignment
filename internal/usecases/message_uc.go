@@ -6,11 +6,12 @@ import (
 )
 
 type MessageUC struct {
-	MessageRepo message.Repository
+	MessageRepo      message.Repository
+	MessagesProducer message.Producer
 }
 
-func NewMessageUC(messageRepo message.Repository) *MessageUC {
-	return &MessageUC{MessageRepo: messageRepo}
+func NewMessageUC(messageRepo message.Repository, messagesProd message.Producer) *MessageUC {
+	return &MessageUC{MessageRepo: messageRepo, MessagesProducer: messagesProd}
 }
 
 func (uc *MessageUC) CreateMessage(ctx context.Context, msg *message.Message) error {

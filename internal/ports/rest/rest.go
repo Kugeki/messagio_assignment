@@ -4,14 +4,10 @@ import (
 	"github.com/go-chi/chi/v5"
 	"log/slog"
 	"messagio_assignment/internal/config"
-	"messagio_assignment/internal/domain/message"
-	"messagio_assignment/internal/usecases"
 	"net/http"
 )
 
-func NewServer(cfg config.Config, msgRepo message.Repository, log *slog.Logger) *http.Server {
-	msgUC := usecases.NewMessageUC(msgRepo)
-
+func NewServer(cfg config.Config, msgUC MessageUsecase, log *slog.Logger) *http.Server {
 	router := chi.NewRouter()
 	msgHandler := NewMessageHandler(router, msgUC, log)
 	handler := NewHandler(router, msgHandler, log)

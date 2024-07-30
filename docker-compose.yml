@@ -11,6 +11,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      kafka-setup1:
+        condition: service_completed_successfully
+      kafka1:
+        condition: service_healthy
 
   postgres:
     image: postgres:16.3-alpine
@@ -28,6 +32,61 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
+
+  zoo1:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zoo1
+    container_name: zoo1
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka1:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka1
+    container_name: kafka1
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 100
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+    depends_on:
+      - zoo1
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka1:29092 --list
+
+  kafka-setup1:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-setup1
+    depends_on:
+      kafka1:
+        condition: service_healthy
+    command:
+      - bash
+      - -c
+      - |
+        kafka-topics --bootstrap-server kafka1:29092 --list
+        kafka-topics --bootstrap-server kafka1:29092 --create --if-not-exists --topic messages-to-process --replication-factor 1 --partitions 6
+        kafka-topics --bootstrap-server kafka1:29092 --create --if-not-exists --topic processed-messages --replication-factor 1 --partitions 6
+        echo -e 'Successfully created the following topics:'
+        kafka-topics --bootstrap-server kafka1:29092 --list
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8090:8080
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zoo1:2181
+    depends_on:
+      - kafka-setup1
 
 volumes:
   db_volume:
