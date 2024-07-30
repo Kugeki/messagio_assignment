@@ -34,9 +34,7 @@ func NewProcessedMsgsConsumer(log *slog.Logger, msgUC MessagesUsecase, brokerLis
 		saramaCfg = sarama.NewConfig()
 	}
 
-	var conf sarama.Config
-	conf = *saramaCfg
-	//conf.Consumer.Offsets.AutoCommit.Enable = false
+	conf := *saramaCfg
 
 	conf.Consumer.Retry.Backoff = consumerCfg.Retry.Backoff
 

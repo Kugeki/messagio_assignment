@@ -27,8 +27,7 @@ func NewMessagesProducer(log *slog.Logger, brokerList []string,
 		saramaCfg = sarama.NewConfig()
 	}
 
-	var conf sarama.Config
-	conf = *saramaCfg
+	conf := *saramaCfg
 
 	conf.Producer.Timeout = producerCfg.Timeout
 
