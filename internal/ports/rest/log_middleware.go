@@ -16,6 +16,7 @@ func LogMiddleware(log *slog.Logger) func(handler http.Handler) http.Handler {
 
 		handleFunc := func(w http.ResponseWriter, r *http.Request) {
 			entry := log.With(
+				slog.String("request_id", middleware.GetReqID(r.Context())),
 				slog.String("method", r.Method),
 				slog.String("path", r.URL.Path),
 				slog.String("remote_addr", r.RemoteAddr),
