@@ -21,7 +21,6 @@ func LogMiddleware(log *slog.Logger) func(handler http.Handler) http.Handler {
 				slog.String("path", r.URL.Path),
 				slog.String("remote_addr", r.RemoteAddr),
 				slog.String("user_agent", r.UserAgent()),
-				slog.String("request_id", middleware.GetReqID(r.Context())),
 			)
 			entry.Info("request received")
 
