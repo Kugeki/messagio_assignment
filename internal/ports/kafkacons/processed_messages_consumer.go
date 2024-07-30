@@ -25,7 +25,7 @@ type ProcessedMsgsConsumer struct {
 
 func NewProcessedMsgsConsumer(log *slog.Logger, msgUC MessagesUsecase, brokerList []string,
 	saramaCfg *sarama.Config, consumerCfg config.KafkaConsumer) (*ProcessedMsgsConsumer, error) {
-	if log != nil {
+	if log == nil {
 		log = logger.NewEraseLogger()
 	}
 	log = log.With(slog.String("component", "ports/kafkacons/processed_messages_consumer"))
