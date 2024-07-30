@@ -7,6 +7,8 @@ coverage:
         threshold: 10%
         paths:
         - "internal/"
+    patch:
+      only_pulls: true
 
 ignore:
   - "**/mocks/*"
