@@ -17,7 +17,7 @@ postgres:
 kafka:
   client_id: "messagio-assignment"
   brokers:
-    - localhost:9092
+    - kafka1:29092
 
   producers:
     messages:
