@@ -50,6 +50,7 @@ func main() {
 
 	saramaCfg := sarama.NewConfig()
 	saramaCfg.ClientID = cfg.Kafka.ClientID
+	saramaCfg.Version = sarama.V3_6_0_0
 
 	// Создание Kafka Producers
 	kafkaProd, err := kafkaprod.New(slogger, saramaCfg, cfg.Kafka)
