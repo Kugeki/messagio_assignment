@@ -10,18 +10,18 @@ import (
 	"messagio_assignment/internal/logger"
 )
 
-type MessagesProducer struct {
+type MessageProducer struct {
 	p     sarama.AsyncProducer
 	log   *slog.Logger
 	topic string
 }
 
 func NewMessagesProducer(log *slog.Logger, brokerList []string,
-	saramaCfg *sarama.Config, producerCfg config.KafkaProducer) (*MessagesProducer, error) {
+	saramaCfg *sarama.Config, producerCfg config.KafkaProducer) (*MessageProducer, error) {
 	if log == nil {
 		log = logger.NewEraseLogger()
 	}
-	log = log.With(slog.String("component", "adapters/kafkaprod/messages_producer"))
+	log = log.With(slog.String("component", "adapters/kafkaprod/message_producer"))
 
 	if saramaCfg == nil {
 		saramaCfg = sarama.NewConfig()
@@ -47,7 +47,7 @@ func NewMessagesProducer(log *slog.Logger, brokerList []string,
 		return nil, err
 	}
 
-	mp := &MessagesProducer{p: producer, log: log, topic: producerCfg.Topic}
+	mp := &MessageProducer{p: producer, log: log, topic: producerCfg.Topic}
 
 	go func() {
 		for err = range producer.Errors() {
@@ -58,14 +58,14 @@ func NewMessagesProducer(log *slog.Logger, brokerList []string,
 	return mp, nil
 }
 
-func (p *MessagesProducer) Close() error {
+func (p *MessageProducer) Close() error {
 	if p.p != nil {
 		return p.p.Close()
 	}
-	return errors.New("MessagesProducer.Close: async producer is nil")
+	return errors.New("MessageProducer.Close: async producer is nil")
 }
 
-func (p *MessagesProducer) Produce(msg *message.Message) {
+func (p *MessageProducer) Produce(msg *message.Message) {
 	p.p.Input() <- &sarama.ProducerMessage{
 		Topic: p.topic,
 		Key:   nil, // sarama.StringEncoder(strconv.Itoa(msg.ID)),

@@ -11,7 +11,7 @@ import (
 type KafkaProducers struct {
 	log *slog.Logger
 
-	messagesProducer *MessagesProducer
+	messagesProducer *MessageProducer
 }
 
 func New(log *slog.Logger, saramaCfg *sarama.Config, kafkaConf config.Kafka) (*KafkaProducers, error) {
@@ -38,7 +38,7 @@ func (p *KafkaProducers) Close() error {
 	return errors.New("KafkaProducers.Close: messagesProducer is nil")
 }
 
-func (p *KafkaProducers) Messages() *MessagesProducer {
+func (p *KafkaProducers) Messages() *MessageProducer {
 	if p.messagesProducer == nil {
 		p.log.Error("messages producer is nil")
 	}
