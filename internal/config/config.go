@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	envDev  = "development"
-	envProd = "production"
-	envTest = "testing"
+	EnvDev  = "development"
+	EnvProd = "production"
+	EnvTest = "testing"
 )
 
 type Config struct {
@@ -109,7 +109,7 @@ type Environment string
 func (e *Environment) UnmarshalText(data []byte) error {
 	str := string(data)
 	switch str {
-	case envDev, envProd, envTest:
+	case EnvDev, EnvProd, EnvTest:
 		*e = Environment(str)
 		return nil
 	default:
@@ -122,9 +122,9 @@ func (e *Environment) String() string {
 }
 
 func (e *Environment) IsDev() bool {
-	return e.String() == envDev || e.String() == envTest
+	return e.String() == EnvDev || e.String() == EnvTest
 }
 
 func (e *Environment) IsProd() bool {
-	return e.String() == envProd
+	return e.String() == EnvProd
 }
