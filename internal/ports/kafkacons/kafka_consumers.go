@@ -11,7 +11,7 @@ import (
 type KafkaConsumers struct {
 	log *slog.Logger
 
-	procMsgsConsumer *ProcessedMsgsConsumer
+	procMsgsConsumer *ProcessedMsgConsumer
 }
 
 func New(log *slog.Logger, msgUC MessagesUsecase,
@@ -39,7 +39,7 @@ func (c *KafkaConsumers) Close() error {
 	return errors.New("KafkaConsumers.Close: procMsgsConsumer is nil")
 }
 
-func (c *KafkaConsumers) ProcessedMsgs() *ProcessedMsgsConsumer {
+func (c *KafkaConsumers) ProcessedMsgs() *ProcessedMsgConsumer {
 	if c.procMsgsConsumer == nil {
 		c.log.Error("procMsgsConsumer is nil")
 	}

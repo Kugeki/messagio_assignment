@@ -15,7 +15,7 @@ type MessagesUsecase interface {
 	UpdateProcessedMessage(ctx context.Context, msg *message.Message) error
 }
 
-type ProcessedMsgsConsumer struct {
+type ProcessedMsgConsumer struct {
 	log *slog.Logger
 
 	msgUC  MessagesUsecase
@@ -24,11 +24,11 @@ type ProcessedMsgsConsumer struct {
 }
 
 func NewProcessedMsgsConsumer(log *slog.Logger, msgUC MessagesUsecase, brokerList []string,
-	saramaCfg *sarama.Config, consumerCfg config.KafkaConsumer) (*ProcessedMsgsConsumer, error) {
+	saramaCfg *sarama.Config, consumerCfg config.KafkaConsumer) (*ProcessedMsgConsumer, error) {
 	if log == nil {
 		log = logger.NewEraseLogger()
 	}
-	log = log.With(slog.String("component", "ports/kafkacons/processed_messages_consumer"))
+	log = log.With(slog.String("component", "ports/kafkacons/processed_message_consumer"))
 
 	if saramaCfg == nil {
 		saramaCfg = sarama.NewConfig()
@@ -50,18 +50,18 @@ func NewProcessedMsgsConsumer(log *slog.Logger, msgUC MessagesUsecase, brokerLis
 
 	topics := consumerCfg.Topics
 
-	return &ProcessedMsgsConsumer{log: log, msgUC: msgUC, cg: consumerGroup, topics: topics}, nil
+	return &ProcessedMsgConsumer{log: log, msgUC: msgUC, cg: consumerGroup, topics: topics}, nil
 }
 
-func (c *ProcessedMsgsConsumer) Close() error {
+func (c *ProcessedMsgConsumer) Close() error {
 	if c.cg != nil {
 		return c.cg.Close()
 	}
-	return errors.New("ProcessedMsgsConsumer.Close: cg is nil")
+	return errors.New("ProcessedMsgConsumer.Close: cg is nil")
 }
 
 // StartConsume is blocking
-func (c *ProcessedMsgsConsumer) StartConsume(ctx context.Context) {
+func (c *ProcessedMsgConsumer) StartConsume(ctx context.Context) {
 	for {
 		if err := c.cg.Consume(ctx, c.topics, c); err != nil {
 			if errors.Is(err, sarama.ErrClosedConsumerGroup) {
@@ -78,7 +78,7 @@ func (c *ProcessedMsgsConsumer) StartConsume(ctx context.Context) {
 	}
 }
 
-func (c *ProcessedMsgsConsumer) ConsumeClaim(ses sarama.ConsumerGroupSession, cm sarama.ConsumerGroupClaim) error {
+func (c *ProcessedMsgConsumer) ConsumeClaim(ses sarama.ConsumerGroupSession, cm sarama.ConsumerGroupClaim) error {
 	log := c.log.With(
 		slog.String("handler", "processed message"),
 		slog.String("member_id", ses.MemberID()),
@@ -114,7 +114,7 @@ func (c *ProcessedMsgsConsumer) ConsumeClaim(ses sarama.ConsumerGroupSession, cm
 	}
 }
 
-func (c *ProcessedMsgsConsumer) HandleMessage(ctx context.Context, log *slog.Logger, claimMsg *sarama.ConsumerMessage) error {
+func (c *ProcessedMsgConsumer) HandleMessage(ctx context.Context, log *slog.Logger, claimMsg *sarama.ConsumerMessage) error {
 	mv, err := dto.MessageValueFromBytes(claimMsg.Value)
 	if err != nil {
 		log.Warn("message value from bytes", logger.Err(err))
@@ -135,10 +135,10 @@ func (c *ProcessedMsgsConsumer) HandleMessage(ctx context.Context, log *slog.Log
 	return nil
 }
 
-func (c *ProcessedMsgsConsumer) Setup(_ sarama.ConsumerGroupSession) error {
+func (c *ProcessedMsgConsumer) Setup(_ sarama.ConsumerGroupSession) error {
 	return nil
 }
 
-func (c *ProcessedMsgsConsumer) Cleanup(_ sarama.ConsumerGroupSession) error {
+func (c *ProcessedMsgConsumer) Cleanup(_ sarama.ConsumerGroupSession) error {
 	return nil
 }
