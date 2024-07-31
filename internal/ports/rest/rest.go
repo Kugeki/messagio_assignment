@@ -4,7 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"log/slog"
-	_ "messagio_assignment/docs" //nolint:blank-imports
+	_ "messagio_assignment/docs" // for swagger
 	"messagio_assignment/internal/config"
 	"net/http"
 	"net/url"
