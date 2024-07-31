@@ -69,6 +69,21 @@ func (h *MessageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.router.ServeHTTP(w, r)
 }
 
+// CreateMessage godoc
+//
+//	@Summary		Create a message
+//	@Description	create a message
+//	@Tags			messages
+//	@Accept			json
+//	@Produce		json
+//	@Param			message body		dto.CreateMessageReq	true	"Create message"
+//	@Success		201	{object}	dto.CreateMessageResp
+//	@Failure		400	{object}	dto.HTTPError
+//	@Failure		409	{object}	dto.HTTPError
+//	@Failure		422	{object}	dto.HTTPError
+//	@Failure		429	{object}	dto.HTTPError
+//	@Failure		500
+//	@Router			/messages [post]
 func (h *MessageHandler) CreateMessage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log := logger.ForRest(h.Log, "create message", r.Context())
@@ -105,6 +120,17 @@ func (h *MessageHandler) CreateMessage() http.HandlerFunc {
 	}
 }
 
+// GetStats godoc
+//
+//	@Summary		Get messages stats
+//	@Description	get messages stats
+//	@Tags			messages
+//	@Produce		json
+//	@Success		200	{object}	dto.GetStatsResp
+//	@Failure		429	{object}	dto.HTTPError
+//	@Failure		500	{object}	dto.HTTPError
+//	@Failure		500
+//	@Router			/messages/stats [get]
 func (h *MessageHandler) GetStats() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log := logger.ForRest(h.Log, "get stats", r.Context())
@@ -144,6 +170,7 @@ func (h *MessageHandler) respond(w http.ResponseWriter, code int, data interface
 
 		if err != nil {
 			h.Log.Error("json marshal error", slog.String("error", err.Error()))
+
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

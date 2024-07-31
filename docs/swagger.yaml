@@ -1,0 +1,96 @@
+basePath: /
+definitions:
+  dto.CreateMessageReq:
+    properties:
+      content:
+        type: string
+      processed:
+        type: boolean
+    type: object
+  dto.CreateMessageResp:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      processed:
+        type: boolean
+    type: object
+  dto.GetStatsResp:
+    properties:
+      all:
+        type: integer
+      processed:
+        type: integer
+    type: object
+  dto.HTTPError:
+    properties:
+      error:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Test task to Messagio.
+  title: Messagio Assigment
+  version: "0.1"
+paths:
+  /messages:
+    post:
+      consumes:
+      - application/json
+      description: create a message
+      parameters:
+      - description: Create message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateMessageReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CreateMessageResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.HTTPError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/dto.HTTPError'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.HTTPError'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/dto.HTTPError'
+        "500":
+          description: Internal Server Error
+      summary: Create a message
+      tags:
+      - messages
+  /messages/stats:
+    get:
+      description: get messages stats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetStatsResp'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/dto.HTTPError'
+        "500":
+          description: Internal Server Error
+      summary: Get messages stats
+      tags:
+      - messages
+swagger: "2.0"
