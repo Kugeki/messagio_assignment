@@ -11,5 +11,25 @@ http_server:
     read_header: 10s
     write: 10s
 
+  handlers:
+    message:
+      create_msg_per_minute: 50
+      get_stats_per_minute: 100
+
 postgres:
   migrate: true
+
+kafka:
+  client_id: "messagio-assignment"
+  brokers:
+    - kafka1:29092
+
+  producers:
+    messages:
+      topic: "messages-to-process"
+
+  consumers:
+    processed_messages:
+      group: "messagio-assigment"
+      topics:
+        - "processed-messages"
