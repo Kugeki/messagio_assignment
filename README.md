@@ -1,6 +1,7 @@
 # messagio_assigment
 
 [![codecov](https://codecov.io/gh/Kugeki/messagio_assignment/graph/badge.svg?token=6E9HFZFGYK)](https://codecov.io/gh/Kugeki/messagio_assignment)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Kugeki/messagio_assignment)](https://goreportcard.com/report/github.com/Kugeki/messagio_assignment)
 
 
 Тестовое задание в Messagio. 
