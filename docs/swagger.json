@@ -37,34 +37,118 @@
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/dto.CreateMessageResp"
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/dto.HTTPError"
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
                             "$ref": "#/definitions/dto.HTTPError"
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
                             "$ref": "#/definitions/dto.HTTPError"
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
                             "$ref": "#/definitions/dto.HTTPError"
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
+                        }
                     }
                 }
             }
@@ -84,16 +168,58 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.GetStatsResp"
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
                         }
                     },
                     "429": {
                         "description": "Too Many Requests",
                         "schema": {
                             "$ref": "#/definitions/dto.HTTPError"
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "type": "string",
+                                "description": "Request limit per minute"
+                            },
+                            "X-RateLimit-Remaining": {
+                                "type": "string",
+                                "description": "The number of requests left for the time window"
+                            },
+                            "X-RateLimit-Reset": {
+                                "type": "string",
+                                "description": "The remaining window before the rate limit resets in UTC epoch seconds"
+                            }
+                        }
                     }
                 }
             }

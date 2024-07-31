@@ -83,6 +83,11 @@ func (h *MessageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 //	@Failure		422	{object}	dto.HTTPError
 //	@Failure		429	{object}	dto.HTTPError
 //	@Failure		500
+//
+// @Header       all              {string}  X-RateLimit-Limit    "Request limit per minute"
+// @Header       all              {string}  X-RateLimit-Remaining    "The number of requests left for the time window"
+// @Header       all              {string}  X-RateLimit-Reset    "The remaining window before the rate limit resets in UTC epoch seconds"
+//
 //	@Router			/messages [post]
 func (h *MessageHandler) CreateMessage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -130,6 +135,11 @@ func (h *MessageHandler) CreateMessage() http.HandlerFunc {
 //	@Failure		429	{object}	dto.HTTPError
 //	@Failure		500	{object}	dto.HTTPError
 //	@Failure		500
+//
+// @Header       all              {string}  X-RateLimit-Limit    "Request limit per minute"
+// @Header       all              {string}  X-RateLimit-Remaining    "The number of requests left for the time window"
+// @Header       all              {string}  X-RateLimit-Reset    "The remaining window before the rate limit resets in UTC epoch seconds"
+//
 //	@Router			/messages/stats [get]
 func (h *MessageHandler) GetStats() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

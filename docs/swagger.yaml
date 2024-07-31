@@ -51,26 +51,92 @@ paths:
       responses:
         "201":
           description: Created
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
           schema:
             $ref: '#/definitions/dto.CreateMessageResp'
         "400":
           description: Bad Request
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
           schema:
             $ref: '#/definitions/dto.HTTPError'
         "409":
           description: Conflict
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
           schema:
             $ref: '#/definitions/dto.HTTPError'
         "422":
           description: Unprocessable Entity
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
           schema:
             $ref: '#/definitions/dto.HTTPError'
         "429":
           description: Too Many Requests
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
           schema:
             $ref: '#/definitions/dto.HTTPError'
         "500":
           description: Internal Server Error
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
       summary: Create a message
       tags:
       - messages
@@ -82,14 +148,47 @@ paths:
       responses:
         "200":
           description: OK
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
           schema:
             $ref: '#/definitions/dto.GetStatsResp'
         "429":
           description: Too Many Requests
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
           schema:
             $ref: '#/definitions/dto.HTTPError'
         "500":
           description: Internal Server Error
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per minute
+              type: string
+            X-RateLimit-Remaining:
+              description: The number of requests left for the time window
+              type: string
+            X-RateLimit-Reset:
+              description: The remaining window before the rate limit resets in UTC
+                epoch seconds
+              type: string
       summary: Get messages stats
       tags:
       - messages
