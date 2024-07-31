@@ -38,7 +38,7 @@ func NewServer(httpCfg config.HTTPServer, msgUC MessageUsecase, log *slog.Logger
 	})
 
 	handler.Router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/swagger", http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/swagger/", http.StatusPermanentRedirect)
 	})
 
 	return &http.Server{
