@@ -3,14 +3,17 @@ module messagio_assignment
 go 1.22.5
 
 require (
+	github.com/IBM/sarama v1.43.2
 	github.com/gavv/httpexpect/v2 v2.16.0
 	github.com/go-chi/chi/v5 v5.1.0
+	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgerrcode v0.0.0-20240316143900-6e2875d9b438
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/pressly/goose/v3 v3.21.1
 	github.com/stretchr/testify v1.9.0
 	github.com/testcontainers/testcontainers-go v0.32.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.32.0
+	golang.org/x/sync v0.7.0
 )
 
 require (
