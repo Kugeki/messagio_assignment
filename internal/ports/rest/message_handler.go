@@ -132,7 +132,7 @@ func (h *MessageHandler) Limit() http.HandlerFunc {
 }
 
 func (h *MessageHandler) error(w http.ResponseWriter, code int, err error) {
-	h.respond(w, code, map[string]string{"error": err.Error()})
+	h.respond(w, code, dto.HTTPError{Error: err.Error()})
 }
 
 func (h *MessageHandler) respond(w http.ResponseWriter, code int, data interface{}) {
