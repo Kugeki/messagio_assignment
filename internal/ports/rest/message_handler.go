@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/httprate"
 	"log/slog"
 	"messagio_assignment/internal/domain"
 	"messagio_assignment/internal/domain/message"
 	"messagio_assignment/internal/logger"
 	"messagio_assignment/internal/ports/rest/dto"
 	"net/http"
+	"time"
 )
 
 //go:generate mockery --name MessageUsecase
@@ -19,14 +21,21 @@ type MessageUsecase interface {
 	GetStats(ctx context.Context) (*message.Stats, error)
 }
 
+type MessageHandlerConfig struct {
+	CreateMsgPerMinute int
+	GetStatsPerMinute  int
+}
+
 type MessageHandler struct {
 	router chi.Router
 	uc     MessageUsecase
+	cfg    MessageHandlerConfig
 
 	Log *slog.Logger
 }
 
-func NewMessageHandler(router chi.Router, uc MessageUsecase, log *slog.Logger) *MessageHandler {
+func NewMessageHandler(router chi.Router, uc MessageUsecase,
+	log *slog.Logger, cfg MessageHandlerConfig) *MessageHandler {
 	if log == nil {
 		log = logger.NewEraseLogger()
 	}
@@ -34,13 +43,25 @@ func NewMessageHandler(router chi.Router, uc MessageUsecase, log *slog.Logger) *
 	log = log.With(
 		slog.String("component", "ports/rest/message_handler"),
 	)
-	return &MessageHandler{router: router, uc: uc, Log: log}
+	return &MessageHandler{router: router, uc: uc, Log: log, cfg: cfg}
 }
 
 func (h *MessageHandler) SetupRoutes(r chi.Router) {
 	r.Route("/messages", func(r chi.Router) {
+		if h.cfg.CreateMsgPerMinute != 0 {
+			r.Use(httprate.Limit(h.cfg.CreateMsgPerMinute, time.Minute,
+				httprate.WithLimitHandler(h.Limit()),
+			))
+		}
 		r.Post("/", h.CreateMessage())
-		r.Get("/stats", h.GetStats())
+	})
+	r.Route("/messages/stats", func(r chi.Router) {
+		if h.cfg.GetStatsPerMinute != 0 {
+			r.Use(httprate.Limit(h.cfg.GetStatsPerMinute, time.Minute,
+				httprate.WithLimitHandler(h.Limit()),
+			))
+		}
+		r.Get("/", h.GetStats())
 	})
 }
 
@@ -101,6 +122,12 @@ func (h *MessageHandler) GetStats() http.HandlerFunc {
 		statsResp.FromDomain(stats)
 
 		h.respond(w, http.StatusOK, statsResp)
+	}
+}
+
+func (h *MessageHandler) Limit() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		h.error(w, http.StatusTooManyRequests, errors.New("too many requests"))
 	}
 }
 

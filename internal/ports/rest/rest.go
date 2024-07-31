@@ -7,18 +7,22 @@ import (
 	"net/http"
 )
 
-func NewServer(cfg config.Config, msgUC MessageUsecase, log *slog.Logger) *http.Server {
+func NewServer(httpCfg config.HTTPServer, msgUC MessageUsecase, log *slog.Logger) *http.Server {
 	router := chi.NewRouter()
-	msgHandler := NewMessageHandler(router, msgUC, log)
+
+	msgHandler := NewMessageHandler(router, msgUC, log, MessageHandlerConfig{
+		CreateMsgPerMinute: httpCfg.Handlers.Message.CreateMsgPerMinute,
+		GetStatsPerMinute:  httpCfg.Handlers.Message.GetStatsPerMinute,
+	})
 	handler := NewHandler(router, msgHandler, log)
 
 	return &http.Server{
-		Addr:              cfg.HTTPServer.Addr,
+		Addr:              httpCfg.Addr,
 		Handler:           handler,
-		ReadTimeout:       cfg.HTTPServer.Timeouts.Read,
-		ReadHeaderTimeout: cfg.HTTPServer.Timeouts.ReadHeader,
-		WriteTimeout:      cfg.HTTPServer.Timeouts.Write,
-		IdleTimeout:       cfg.HTTPServer.Timeouts.Idle,
-		MaxHeaderBytes:    cfg.HTTPServer.MaxHeaderBytes,
+		ReadTimeout:       httpCfg.Timeouts.Read,
+		ReadHeaderTimeout: httpCfg.Timeouts.ReadHeader,
+		WriteTimeout:      httpCfg.Timeouts.Write,
+		IdleTimeout:       httpCfg.Timeouts.Idle,
+		MaxHeaderBytes:    httpCfg.MaxHeaderBytes,
 	}
 }
