@@ -104,6 +104,12 @@ func ReadConfig(path string) (Config, error) {
 	return cfg, err
 }
 
+var (
+	DevEnvironment  = Environment(EnvDev)
+	ProdEnvironment = Environment(EnvProd)
+	TestEnvironment = Environment(EnvTest)
+)
+
 type Environment string
 
 func (e *Environment) UnmarshalText(data []byte) error {
