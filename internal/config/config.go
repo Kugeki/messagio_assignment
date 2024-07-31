@@ -31,6 +31,13 @@ type HTTPServer struct {
 		Write      time.Duration `yaml:"write" env:"WRITE_TIMEOUT"`
 		Idle       time.Duration `yaml:"idle" env:"IDLE_TIMEOUT"`
 	} `yaml:"timeouts"`
+
+	Handlers struct {
+		Message struct {
+			CreateMsgPerMinute int `yaml:"create_msg_per_minute"`
+			GetStatsPerMinute  int `yaml:"get_stats_per_minute"`
+		} `yaml:"message"`
+	} `yaml:"handlers"`
 }
 
 type Postgres struct {

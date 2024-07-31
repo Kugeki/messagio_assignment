@@ -110,7 +110,7 @@ func main() {
 	}()
 
 	// Создание и запуск rest http сервера
-	server := rest.NewServer(cfg, messageUC, slogger)
+	server := rest.NewServer(cfg.HTTPServer, messageUC, slogger)
 	closer.Add(func(ctx context.Context) error {
 		if err := server.Shutdown(ctx); err != nil {
 			return fmt.Errorf("rest http server shutdown: %w", err)

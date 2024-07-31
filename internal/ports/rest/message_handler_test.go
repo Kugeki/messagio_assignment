@@ -18,7 +18,7 @@ import (
 
 func TestNewMessageHandler(t *testing.T) {
 	t.Run("logger is not nil", func(t *testing.T) {
-		mh := NewMessageHandler(nil, nil, nil)
+		mh := NewMessageHandler(nil, nil, nil, MessageHandlerConfig{})
 		require.NotNil(t, mh.Log)
 	})
 }
@@ -74,7 +74,7 @@ func TestMessageHandler_CreateMessage(t *testing.T) {
 
 		uc := mocks.NewMessageUsecase(t)
 		router := chi.NewRouter()
-		mh := NewMessageHandler(router, uc, nil)
+		mh := NewMessageHandler(router, uc, nil, MessageHandlerConfig{})
 		mh.SetupRoutes(router)
 
 		server := httptest.NewServer(mh)
@@ -122,7 +122,7 @@ func TestMessageHandler_CreateMessage(t *testing.T) {
 	t.Run("bad request", func(t *testing.T) {
 		uc := mocks.NewMessageUsecase(t)
 		router := chi.NewRouter()
-		mh := NewMessageHandler(router, uc, nil)
+		mh := NewMessageHandler(router, uc, nil, MessageHandlerConfig{})
 		mh.SetupRoutes(router)
 
 		server := httptest.NewServer(mh)
@@ -179,7 +179,7 @@ func TestMessageHandler_GetStats(t *testing.T) {
 
 	uc := mocks.NewMessageUsecase(t)
 	router := chi.NewRouter()
-	mh := NewMessageHandler(router, uc, nil)
+	mh := NewMessageHandler(router, uc, nil, MessageHandlerConfig{})
 	mh.SetupRoutes(router)
 
 	server := httptest.NewServer(mh)
@@ -216,4 +216,97 @@ func TestMessageHandler_GetStats(t *testing.T) {
 			assert.Equal(t, wantResp, gotResp)
 		})
 	}
+}
+
+func TestMessageHandler_Limit(t *testing.T) {
+	var (
+		successfulRequests = 6
+		limitedRequests    = 4
+	)
+
+	uc := mocks.NewMessageUsecase(t)
+	router := chi.NewRouter()
+	mh := NewMessageHandler(router, uc, nil, MessageHandlerConfig{
+		CreateMsgPerMinute: successfulRequests,
+		GetStatsPerMinute:  successfulRequests,
+	})
+	mh.SetupRoutes(router)
+
+	server := httptest.NewServer(mh)
+	defer server.Close()
+
+	e := httpexpect.Default(t, server.URL)
+
+	t.Run("create message", func(t *testing.T) {
+		var (
+			msg           = &message.Message{Content: "some content"}
+			createdStatus = http.StatusCreated
+			limitStatus   = http.StatusTooManyRequests
+		)
+
+		for range successfulRequests {
+			uc.On("CreateMessage", mock.Anything,
+				msg).Return(nil).Once()
+		}
+
+		msgReq := dto.CreateMessageReq{
+			Content:   msg.Content,
+			Processed: msg.Processed,
+		}
+
+		for range successfulRequests {
+			obj := e.POST("/messages").WithJSON(msgReq).
+				Expect().
+				Status(createdStatus).
+				HasContentType("application/json").
+				JSON().Object()
+
+			obj.Keys().NotContainsAny("error")
+		}
+
+		for range limitedRequests {
+			obj := e.POST("/messages").WithJSON(msgReq).
+				Expect().
+				Status(limitStatus).
+				HasContentType("application/json").
+				JSON().Object()
+
+			obj.Keys().ContainsOnly("error")
+			obj.Value("error").String().NotEmpty()
+		}
+	})
+
+	t.Run("get stats", func(t *testing.T) {
+		var (
+			stats       = &message.Stats{}
+			getStatus   = http.StatusOK
+			limitStatus = http.StatusTooManyRequests
+		)
+
+		for range successfulRequests {
+			uc.On("GetStats", mock.Anything).
+				Return(stats, nil).Once()
+		}
+
+		for range successfulRequests {
+			obj := e.GET("/messages/stats").
+				Expect().
+				Status(getStatus).
+				HasContentType("application/json").
+				JSON().Object()
+
+			obj.Keys().NotContainsAny("error")
+		}
+
+		for range limitedRequests {
+			obj := e.GET("/messages/stats").
+				Expect().
+				Status(limitStatus).
+				HasContentType("application/json").
+				JSON().Object()
+
+			obj.Keys().ContainsOnly("error")
+			obj.Value("error").String().NotEmpty()
+		}
+	})
 }
