@@ -2,8 +2,8 @@ package pgstore
 
 import (
 	"context"
-	"messagio_assignment/internal/domain"
-	"messagio_assignment/internal/domain/message"
+	"messagioassignment/internal/domain"
+	"messagioassignment/internal/domain/message"
 )
 
 func (su *PGStoreTestSuite) MsgRepo() *MessageRepoPG {

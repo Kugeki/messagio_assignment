@@ -2,7 +2,7 @@ package usecases
 
 import (
 	"context"
-	"messagio_assignment/internal/domain/message"
+	"messagioassignment/internal/domain/message"
 )
 
 type MessageUC struct {

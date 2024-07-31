@@ -5,10 +5,10 @@ import (
 	"errors"
 	"github.com/IBM/sarama"
 	"log/slog"
-	"messagio_assignment/internal/config"
-	"messagio_assignment/internal/domain/message"
-	"messagio_assignment/internal/logger"
-	"messagio_assignment/internal/ports/kafkacons/dto"
+	"messagioassignment/internal/config"
+	"messagioassignment/internal/domain/message"
+	"messagioassignment/internal/logger"
+	"messagioassignment/internal/ports/kafkacons/dto"
 )
 
 type MessagesUsecase interface {

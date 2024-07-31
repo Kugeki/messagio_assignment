@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/ilyakaznacheev/cleanenv"
 	"log"
-	"messagio_assignment/internal/config"
+	"messagioassignment/internal/config"
 )
 
 func main() {

@@ -7,8 +7,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/pressly/goose/v3"
 	"log/slog"
-	"messagio_assignment/internal/logger"
-	ms "messagio_assignment/migrations"
+	"messagioassignment/internal/logger"
+	ms "messagioassignment/migrations"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // for store.Migrate
 )

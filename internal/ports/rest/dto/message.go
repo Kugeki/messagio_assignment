@@ -1,6 +1,6 @@
 package dto
 
-import "messagio_assignment/internal/domain/message"
+import "messagioassignment/internal/domain/message"
 
 type CreateMessageReq struct {
 	Content   string `json:"content"`

@@ -4,10 +4,10 @@ import (
 	"errors"
 	"github.com/IBM/sarama"
 	"log/slog"
-	"messagio_assignment/internal/adapters/kafkaprod/dto"
-	"messagio_assignment/internal/config"
-	"messagio_assignment/internal/domain/message"
-	"messagio_assignment/internal/logger"
+	"messagioassignment/internal/adapters/kafkaprod/dto"
+	"messagioassignment/internal/config"
+	"messagioassignment/internal/domain/message"
+	"messagioassignment/internal/logger"
 )
 
 type MessageProducer struct {

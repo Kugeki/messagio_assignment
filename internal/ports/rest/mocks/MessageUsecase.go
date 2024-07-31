@@ -4,7 +4,7 @@ package mocks
 
 import (
 	context "context"
-	message "messagio_assignment/internal/domain/message"
+	message "messagioassignment/internal/domain/message"
 
 	mock "github.com/stretchr/testify/mock"
 )

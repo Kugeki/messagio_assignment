@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/IBM/sarama"
 	"log/slog"
-	"messagio_assignment/internal/config"
-	"messagio_assignment/internal/logger"
+	"messagioassignment/internal/config"
+	"messagioassignment/internal/logger"
 )
 
 type KafkaConsumers struct {

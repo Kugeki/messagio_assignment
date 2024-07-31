@@ -1,4 +1,4 @@
-module messagio_assignment
+module messagioassignment
 
 go 1.22.5
 

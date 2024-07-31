@@ -3,8 +3,8 @@ package pgstore
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"messagio_assignment/internal/domain"
-	"messagio_assignment/internal/domain/message"
+	"messagioassignment/internal/domain"
+	"messagioassignment/internal/domain/message"
 )
 
 type MessageRepoPG struct {

@@ -5,7 +5,7 @@ import (
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"messagio_assignment/internal/domain"
+	"messagioassignment/internal/domain"
 )
 
 func ErrCreateIntoDomain(dbErr error) (domainErr error) {

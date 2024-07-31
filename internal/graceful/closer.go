@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"golang.org/x/sync/errgroup"
 	"log/slog"
-	"messagio_assignment/internal/logger"
+	"messagioassignment/internal/logger"
 	"sync"
 	"time"
 )

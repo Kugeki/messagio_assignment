@@ -2,7 +2,7 @@ package dto
 
 import (
 	"encoding/json"
-	"messagio_assignment/internal/domain/message"
+	"messagioassignment/internal/domain/message"
 )
 
 type MessageValue struct {

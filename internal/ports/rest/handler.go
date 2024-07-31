@@ -4,7 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"log/slog"
-	"messagio_assignment/internal/logger"
+	"messagioassignment/internal/logger"
 	"net/http"
 )
 
