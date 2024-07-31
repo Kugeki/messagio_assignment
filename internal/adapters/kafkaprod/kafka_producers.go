@@ -20,7 +20,7 @@ func New(log *slog.Logger, saramaCfg *sarama.Config, kafkaConf config.Kafka) (*K
 	}
 	log = log.With(slog.String("component", "adapters/kafkaprod"))
 
-	messagesProducer, err := NewMessagesProducer(log, kafkaConf.Brokers,
+	messagesProducer, err := NewMessageProducer(log, kafkaConf.Brokers,
 		saramaCfg, kafkaConf.Producers.Messages)
 	if err != nil {
 		return nil, err

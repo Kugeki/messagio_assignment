@@ -23,7 +23,7 @@ type ProcessedMsgConsumer struct {
 	topics []string
 }
 
-func NewProcessedMsgsConsumer(log *slog.Logger, msgUC MessagesUsecase, brokerList []string,
+func NewProcessedMsgConsumer(log *slog.Logger, msgUC MessagesUsecase, brokerList []string,
 	saramaCfg *sarama.Config, consumerCfg config.KafkaConsumer) (*ProcessedMsgConsumer, error) {
 	if log == nil {
 		log = logger.NewEraseLogger()

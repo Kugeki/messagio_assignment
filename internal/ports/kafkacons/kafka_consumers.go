@@ -21,7 +21,7 @@ func New(log *slog.Logger, msgUC MessagesUsecase,
 	}
 	log = log.With(slog.String("component", "ports/kafkacons"))
 
-	procMsgsConsumer, err := NewProcessedMsgsConsumer(log, msgUC, kafkaConf.Brokers,
+	procMsgsConsumer, err := NewProcessedMsgConsumer(log, msgUC, kafkaConf.Brokers,
 		saramaCfg, kafkaConf.Consumers.ProcessedMessages)
 	if err != nil {
 		return nil, err

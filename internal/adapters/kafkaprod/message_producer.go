@@ -16,7 +16,7 @@ type MessageProducer struct {
 	topic string
 }
 
-func NewMessagesProducer(log *slog.Logger, brokerList []string,
+func NewMessageProducer(log *slog.Logger, brokerList []string,
 	saramaCfg *sarama.Config, producerCfg config.KafkaProducer) (*MessageProducer, error) {
 	if log == nil {
 		log = logger.NewEraseLogger()
