@@ -13,7 +13,7 @@ type Environment interface {
 
 var DefaultWriter = os.Stdout
 
-func FromConfig(environment Environment, level slog.Level) *slog.Logger {
+func New(environment Environment, level slog.Level) *slog.Logger {
 	return slog.New(
 		NewHandler(environment, &slog.HandlerOptions{Level: level}),
 	).With(slog.String("env", environment.String()))

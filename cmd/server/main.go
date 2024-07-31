@@ -33,7 +33,7 @@ func main() {
 	}
 
 	// Создание логгера
-	slogger := logger.FromConfig(cfg.Environment, cfg.LogLevel)
+	slogger := logger.New(cfg.Environment, cfg.LogLevel)
 
 	sarama.Logger = logger.NewSaramaLogger(slogger, slog.LevelInfo)
 	sarama.DebugLogger = logger.NewSaramaLogger(slogger, slog.LevelDebug)
