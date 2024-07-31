@@ -13,3 +13,4 @@ coverage:
 ignore:
   - "**/mocks/*"
   - "cmd/"
+  - "docs/"
