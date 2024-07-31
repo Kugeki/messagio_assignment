@@ -18,6 +18,10 @@ type Repository interface {
 	UpdateProcessed(ctx context.Context, msg *Message) error
 }
 
+type Producer interface {
+	Produce(msg *Message)
+}
+
 type Error struct {
 	Err error
 }

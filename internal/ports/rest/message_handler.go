@@ -17,7 +17,6 @@ import (
 type MessageUsecase interface {
 	CreateMessage(ctx context.Context, msg *message.Message) error
 	GetStats(ctx context.Context) (*message.Stats, error)
-	UpdateProcessedMessage(ctx context.Context, msg *message.Message) error
 }
 
 type MessageHandler struct {

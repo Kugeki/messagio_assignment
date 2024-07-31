@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	envDev  = "development"
-	envProd = "production"
+	EnvDev  = "development"
+	EnvProd = "production"
+	EnvTest = "testing"
 )
 
 type Config struct {
@@ -18,6 +19,7 @@ type Config struct {
 	ShutdownTimeout time.Duration `yaml:"shutdown_timeout" env-default:"10s"`
 	HTTPServer      HTTPServer    `yaml:"http_server" env-prefix:"HTTP_SERVER_"`
 	Postgres        Postgres      `yaml:"postgres" env-prefix:"POSTGRES_"`
+	Kafka           Kafka         `yaml:"kafka" env-prefix:"KAFKA_"`
 }
 
 type HTTPServer struct {
@@ -32,8 +34,68 @@ type HTTPServer struct {
 }
 
 type Postgres struct {
-	ConnectionURL string `env:"CONNECTION_URL" env-required:"true"`
-	Migrate       bool   `yaml:"migrate" env:"MIGRATE" env-required:"true"`
+	ConnectionURL string `env:"CONNECTION_URL" env-required:"true" env-description:"required"`
+	Migrate       bool   `yaml:"migrate" env:"MIGRATE" env-required:"true" env-description:"required"`
+}
+
+type Kafka struct {
+	ClientID string   `yaml:"client_id" env:"CLIENT_ID" env-required:"true" env-description:"required"`
+	Brokers  []string `yaml:"brokers" env:"BROKERS" env-required:"true" env-description:"required"`
+
+	Producers struct {
+		Messages KafkaProducer `yaml:"messages" env-prefix:"MESSAGES_"`
+	} `yaml:"producers" env-prefix:"PRODUCER_"`
+	Consumers struct {
+		ProcessedMessages KafkaConsumer `yaml:"processed_messages" env-prefix:"PROCESSED_MESSAGES"`
+	} `yaml:"consumers" env-prefix:"CONSUMER_"`
+}
+
+// KafkaProducer : some from sarama.NewConfig and sarama.Config
+type KafkaProducer struct {
+	Topic string `yaml:"topic" env:"TOPIC" env-required:"true" env-description:"required"`
+
+	Timeout time.Duration `yaml:"timeout" env-default:"10s" env:"TIMEOUT"`
+	Retry   struct {
+		// The total number of times to retry sending a message (default 3).
+		// Similar to the `message.send.max.retries` setting of the JVM producer.
+		Max int `yaml:"max" env-default:"3" env:"MAX"`
+		// How long to wait for the cluster to settle between retries
+		// (default 100ms). Similar to the `retry.backoff.ms` setting of the
+		// JVM producer.
+		Backoff time.Duration `yaml:"backoff" env-default:"100ms" env:"BACKOFF"`
+	} `yaml:"retry" env-prefix:"RETRY_"`
+
+	Flush struct {
+		// The best-effort number of bytes needed to trigger a flush. Use the
+		// global sarama.MaxRequestSize to set a hard upper limit.
+		Bytes int `yaml:"bytes" env:"BYTES"`
+		// The best-effort number of messages needed to trigger a flush. Use
+		// `MaxMessages` to set a hard upper limit.
+		Messages int `yaml:"messages" env:"MESSAGES"`
+		// The best-effort frequency of flushes. Equivalent to
+		// `queue.buffering.max.ms` setting of JVM producer.
+		Frequency time.Duration `yaml:"frequency" env:"FREQUENCY"`
+		// The maximum number of messages the producer will send in a single
+		// broker request. Defaults to 0 for unlimited. Similar to
+		// `queue.buffering.max.messages` in the JVM producer.
+		MaxMessages int `yaml:"max_messages" env:"MAX_MESSAGES"`
+	} `yaml:"flush" env-prefix:"FLUSH_"`
+}
+
+type KafkaConsumer struct {
+	Group  string   `yaml:"group" env:"GROUP" env-required:"true" env-description:"required"`
+	Topics []string `yaml:"topics" env:"TOPICS" env-required:"true" env-description:"required"`
+
+	Retry struct {
+		Backoff time.Duration `yaml:"backoff" env:"BACKOFF" env-default:"2s"`
+	} `yaml:"retry" env-prefix:"RETRY_"`
+
+	MaxWaitTime time.Duration `yaml:"max_wait_time" env:"MAX_WAIT_TIME" env-default:"500ms"`
+	Fetch       struct {
+		Min     int32 `yaml:"min" env:"MIN" env-default:"1"`
+		Default int32 `yaml:"default" env:"DEFAULT" env-default:"1048576"`
+		Max     int32 `yaml:"max" env:"MAX"`
+	} `yaml:"fetch" env-prefix:"FETCH_"`
 }
 
 func ReadConfig(path string) (Config, error) {
@@ -42,12 +104,18 @@ func ReadConfig(path string) (Config, error) {
 	return cfg, err
 }
 
+var (
+	DevEnvironment  = Environment(EnvDev)
+	ProdEnvironment = Environment(EnvProd)
+	TestEnvironment = Environment(EnvTest)
+)
+
 type Environment string
 
 func (e *Environment) UnmarshalText(data []byte) error {
 	str := string(data)
 	switch str {
-	case envDev, envProd:
+	case EnvDev, EnvProd, EnvTest:
 		*e = Environment(str)
 		return nil
 	default:
@@ -60,9 +128,9 @@ func (e *Environment) String() string {
 }
 
 func (e *Environment) IsDev() bool {
-	return e.String() == envDev
+	return e.String() == EnvDev || e.String() == EnvTest
 }
 
 func (e *Environment) IsProd() bool {
-	return e.String() == envProd
+	return e.String() == EnvProd
 }

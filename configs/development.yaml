@@ -13,3 +13,18 @@ http_server:
 
 postgres:
   migrate: true
+
+kafka:
+  client_id: "messagio-assignment"
+  brokers:
+    - kafka1:29092
+
+  producers:
+    messages:
+      topic: "messages-to-process"
+
+  consumers:
+    processed_messages:
+      group: "messagio-default"
+      topics:
+        - "processed-messages"

@@ -13,6 +13,8 @@ import (
 
 type Func func(ctx context.Context) error
 
+// Closer performs graceful shutdown via Closer.Shutdown
+// with close functions that can added with Closer.Add
 type Closer struct {
 	mu        sync.Mutex
 	functions []Func

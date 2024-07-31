@@ -6,15 +6,22 @@ import (
 )
 
 type MessageUC struct {
-	MessageRepo message.Repository
+	MessageRepo      message.Repository
+	MessagesProducer message.Producer
 }
 
-func NewMessageUC(messageRepo message.Repository) *MessageUC {
-	return &MessageUC{MessageRepo: messageRepo}
+func NewMessageUC(messageRepo message.Repository, messagesProd message.Producer) *MessageUC {
+	return &MessageUC{MessageRepo: messageRepo, MessagesProducer: messagesProd}
 }
 
 func (uc *MessageUC) CreateMessage(ctx context.Context, msg *message.Message) error {
-	return uc.MessageRepo.Create(ctx, msg)
+	err := uc.MessageRepo.Create(ctx, msg)
+	if err != nil {
+		return err
+	}
+
+	uc.MessagesProducer.Produce(msg)
+	return nil
 }
 
 func (uc *MessageUC) GetStats(ctx context.Context) (*message.Stats, error) {

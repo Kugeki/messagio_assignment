@@ -1,5 +1,6 @@
 services:
   webapp:
+    image: !reset null
     build: .
     environment:
       APP_CONFIG_PATH: configs/development.yaml
