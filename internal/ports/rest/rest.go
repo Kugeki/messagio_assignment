@@ -29,16 +29,16 @@ func NewServer(httpCfg config.HTTPServer, msgUC MessageUsecase, log *slog.Logger
 	swaggerURL := url.URL{
 		Path: "/swagger/doc.json",
 	}
-	handler.Router.Get("/swagger/*", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-
-		httpSwagger.Handler(
-			httpSwagger.URL(swaggerURL.String()),
-		)(w, r)
-	})
+	handler.Router.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL(swaggerURL.String()),
+	))
 
 	handler.Router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/swagger/", http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/swagger/index.html", http.StatusSeeOther)
+	})
+
+	handler.Router.Get("/swagger", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/swagger/index.html", http.StatusSeeOther)
 	})
 
 	return &http.Server{
