@@ -10,8 +10,6 @@ import (
 	"net/url"
 )
 
-//go:generate
-
 //	@title			Messagio Assigment
 //	@version		0.1
 //	@description	Test task to Messagio.

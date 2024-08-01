@@ -60,10 +60,6 @@ func (su *PGStoreTestSuite) TestMessageRepo() {
 		}
 	})
 
-	su.Run("create, update, get message", func() {
-		// TODO
-	})
-
 	su.Run("stats", func() {
 		notProcessed := func() *message.Message {
 			return &message.Message{ID: 0, Content: "not processed", Processed: false}
